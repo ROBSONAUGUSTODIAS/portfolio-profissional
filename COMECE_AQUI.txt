@@ -1,0 +1,128 @@
+╔══════════════════════════════════════════════════════════════════════╗
+║                                                                      ║
+║     🎯 PORTFÓLIO PROFISSIONAL COM STREAMLIT - COMEÇAR AGORA         ║
+║                                                                      ║
+║     Status: ✅ INSTALADO E PRONTO PARA USAR                        ║
+║                                                                      ║
+╚══════════════════════════════════════════════════════════════════════╝
+
+═══════════════════════════════════════════════════════════════════════════
+
+🚀 INICIAR EM 3 PASSOS:
+
+1️⃣  Abra PowerShell nesta pasta
+2️⃣  Execute:
+    
+    .\.venv\Scripts\Activate
+
+3️⃣  Execute:
+    
+    streamlit run app.py
+
+✨ Pronto! A aplicação abrirá automaticamente em http://localhost:8501
+
+═══════════════════════════════════════════════════════════════════════════
+
+📝 PRIMEIRA VEZ? Siga o guia rápido:
+
+Arquivo: GUIA_RAPIDO.md
+├─ Instalação (5 minutos)
+├─ Primeiro uso
+├─ Adicionar dados
+└─ Visualizar portfólio
+
+═══════════════════════════════════════════════════════════════════════════
+
+🎓 APRENDER MAIS:
+
+📖 README.md
+   └─ Documentação completa e referência
+
+🔧 DOCUMENTACAO_TECNICA.md
+   └─ Arquitetura, schemas e padrões de código
+
+💡 EXEMPLOS.md
+   └─ Exemplos práticos de uso
+
+🔍 TROUBLESHOOTING.md
+   └─ Resolver problemas comuns
+
+═══════════════════════════════════════════════════════════════════════════
+
+💡 DICAS:
+
+✨ Dados de Exemplo (Já Carregados!)
+   └─ Perfil: João Silva
+   └─ Experiências: 2
+   └─ Educações: 2
+   └─ Habilidades: 14
+   └─ Links Sociais: 3
+
+📊 Adicionar Seus Dados:
+   1. Vá para ⚙️ Administração
+   2. Edite o perfil e adicione seus dados
+   3. Veja resultado em 🏠 Início, 📄 Currículo, 🏆 Certificados
+
+🏆 Slider de Certificados:
+   1. Vá para ⚙️ Administração → 🏆 Certificados
+   2. Faça upload de uma imagem ou PDF
+   3. Preencha informações
+   4. Vá para 🏆 Certificados para ver o slider!
+
+═══════════════════════════════════════════════════════════════════════════
+
+📂 ESTRUTURA:
+
+d:\PROTOTIPO\PORTIFOLIO/
+├─ app.py                    ← Aplicação principal
+├─ database.py               ← Banco de dados
+├─ assets/                   ← Configurações
+├─ data/
+│  ├─ portfolio.db           ← Banco SQLite
+│  ├─ curriculo/             ← Seus PDFs
+│  └─ certificados/          ← Seus certificados
+├─ .streamlit/               ← Config Streamlit
+├─ README.md                 ← Documentação
+└─ [mais arquivos...]
+
+═══════════════════════════════════════════════════════════════════════════
+
+🔧 REQUISITOS:
+
+✅ Python 3.8+ (você tem 3.13.1)
+✅ pip (gerenciador de pacotes)
+✅ Streamlit (já instalado)
+✅ Pillow (já instalado)
+✅ SQLite (já instalado)
+
+═══════════════════════════════════════════════════════════════════════════
+
+❓ PROBLEMAS?
+
+Erro: "Module not found"
+→ Reinstale: pip install -r requirements.txt
+
+Erro: "Banco corrompido"
+→ Delete: del data\portfolio.db
+→ Recrie: python init_sample_data.py
+
+Porta em uso
+→ Use outra: streamlit run app.py --server.port 8502
+
+Veja TROUBLESHOOTING.md para mais...
+
+═══════════════════════════════════════════════════════════════════════════
+
+📞 SUPORTE:
+
+Documentação: README.md, GUIA_RAPIDO.md, EXEMPLOS.md
+Problemas: TROUBLESHOOTING.md
+Técnico: DOCUMENTACAO_TECNICA.md
+
+═══════════════════════════════════════════════════════════════════════════
+
+🎉 BORA COMEÇAR!
+
+$ streamlit run app.py
+
+═══════════════════════════════════════════════════════════════════════════
