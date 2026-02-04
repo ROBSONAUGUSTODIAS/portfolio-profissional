@@ -21,6 +21,24 @@ from database import Database
 # Configurar página
 configure_page()
 
+# Função para inicializar banco de dados com dados de exemplo
+def initialize_database_if_empty():
+    """Inicializa o banco de dados com dados de exemplo se estiver vazio"""
+    db = Database(str(DB_PATH))
+    curriculum = db.get_curriculum()
+    
+    # Se não houver currículo, criar dados de exemplo
+    if not curriculum:
+        try:
+            from init_sample_data import init_sample_data
+            init_sample_data()
+        except Exception as e:
+            # Se falhar, apenas criar banco vazio (será preenchido manualmente)
+            pass
+
+# Inicializar banco de dados
+initialize_database_if_empty()
+
 # Inicializar session state
 if "db" not in st.session_state:
     st.session_state.db = Database(str(DB_PATH))
