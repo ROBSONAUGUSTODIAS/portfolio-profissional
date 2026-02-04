@@ -6,7 +6,6 @@ import streamlit as st
 from pathlib import Path
 import sys
 import datetime
-from streamlit_super_slider import st_slider
 
 # Adicionar pasta de assets ao path
 sys.path.insert(0, str(Path(__file__).parent / "assets"))
@@ -359,16 +358,16 @@ def show_certificados():
     if num_certs > 1:
         default_idx = selected if (selected is not None and 0 <= selected < num_certs) else 0
         
-        # Criar dicionário de valores para o super slider
-        # Formato: {índice: "Certificado X"} - Começando com 1
-        slider_values = {i+1: f"Certificado {i+1}" for i in range(num_certs)}
-        
         st.write("**Navegue pelos certificados:**")
-        slider_value = st_slider(
-            values=slider_values,
+        # Usar slider nativo do Streamlit
+        slider_value = st.slider(
+            label="",
+            min_value=1,
+            max_value=num_certs,
+            value=default_idx + 1,
+            step=1,
             key="cert_slider",
-            dots=True,
-            steps=1
+            label_visibility="collapsed"
         )
         # Ajustar para índice base 0 para acessar a lista
         slider_value = slider_value - 1
