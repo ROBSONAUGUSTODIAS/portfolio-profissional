@@ -23,18 +23,22 @@ configure_page()
 
 # Função para inicializar banco de dados com dados de exemplo
 def initialize_database_if_empty():
-    """Inicializa o banco de dados com dados de exemplo se estiver vazio"""
+    """Inicializa o banco de dados com dados de Robson se estiver vazio"""
     db = Database(str(DB_PATH))
     curriculum = db.get_curriculum()
     
-    # Se não houver currículo, criar dados de exemplo
+    # Se não houver currículo, criar dados
     if not curriculum:
         try:
-            from init_sample_data import init_sample_data
-            init_sample_data()
+            from init_robson_data import init_robson_data
+            init_robson_data()
         except Exception as e:
-            # Se falhar, apenas criar banco vazio (será preenchido manualmente)
-            pass
+            # Se falhar, tentar dados de exemplo
+            try:
+                from init_sample_data import init_sample_data
+                init_sample_data()
+            except:
+                pass
 
 # Inicializar banco de dados
 initialize_database_if_empty()
