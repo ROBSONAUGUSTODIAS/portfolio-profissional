@@ -352,11 +352,12 @@ class AuthManager:
     @staticmethod
     def show_login_form() -> bool:
         """
-        Exibe o formulário de login com rate limiting e CAPTCHA
+        Exibe o formulário de login com rate limiting
         Retorna True se autenticado, False caso contrário
         """
         from assets.security import get_rate_limiter
-        from assets.captcha_manager import CaptchaManager
+        # CAPTCHA desabilitado para compatibilidade com Streamlit Cloud
+        # from assets.captcha_manager import CaptchaManager
         import time
         
         # Criar container centralizado
@@ -368,15 +369,15 @@ class AuthManager:
             st.markdown("Área de Administração - Autenticação Obrigatória")
             st.markdown("---")
             
-            # Inicializar CAPTCHA se necessário
-            if "captcha_text" not in st.session_state:
-                CaptchaManager.initialize_captcha_session()
+            # CAPTCHA desabilitado
+            # if "captcha_text" not in st.session_state:
+            #     CaptchaManager.initialize_captcha_session()
             
-            # Exibir CAPTCHA fora do formulário
-            st.markdown("### 🤖 Verificação Anti-Bot")
-            captcha_text, captcha_input = CaptchaManager.show_captcha()
+            # CAPTCHA desabilitado
+            # st.markdown("### 🤖 Verificação Anti-Bot")
+            # captcha_text, captcha_input = CaptchaManager.show_captcha()
             
-            st.markdown("---")
+            # st.markdown("---")
             
             with st.form("login_form"):
                 username = st.text_input(
@@ -393,12 +394,12 @@ class AuthManager:
                 
                 with col1:
                     if st.form_submit_button("🔓 Entrar", use_container_width=True):
-                        # Verificar CAPTCHA primeiro
-                        if not captcha_input or not CaptchaManager.verify_captcha(captcha_input, captcha_text):
-                            st.error("❌ Código de verificação incorreto!")
-                            CaptchaManager.refresh_captcha()
-                            st.rerun()
-                            return False
+                        # CAPTCHA desabilitado para compatibilidade
+                        # if not captcha_input or not CaptchaManager.verify_captcha(captcha_input, captcha_text):
+                        #     st.error("❌ Código de verificação incorreto!")
+                        #     CaptchaManager.refresh_captcha()
+                        #     st.rerun()
+                        #     return False
                         
                         # Obter rate limiter
                         rate_limiter = get_rate_limiter()
@@ -408,7 +409,7 @@ class AuthManager:
                         
                         if not allowed:
                             st.error(f"❌ {error_msg}")
-                            CaptchaManager.refresh_captcha()
+                            # CaptchaManager.refresh_captcha()
                             st.rerun()
                             return False
                         
@@ -420,7 +421,7 @@ class AuthManager:
                             st.session_state.admin_authenticated = True
                             st.session_state.last_activity = time.time()
                             rate_limiter.record_attempt(username, True)
-                            CaptchaManager.reset_captcha()
+                            # CaptchaManager.reset_captcha()
                             st.success("✅ Autenticado com sucesso!")
                             st.rerun()
                         else:
@@ -428,19 +429,19 @@ class AuthManager:
                             rate_limiter.record_attempt(username, False)
                             st.error("❌ Usuário ou senha inválidos!")
                             st.session_state.admin_authenticated = False
-                            CaptchaManager.refresh_captcha()
+                            # CaptchaManager.refresh_captcha()
                             st.rerun()
                             return False
                 
                 with col2:
                     if st.form_submit_button("❌ Cancelar", use_container_width=True):
                         st.info("Acesso cancelado.")
-                        CaptchaManager.reset_captcha()
+                        # CaptchaManager.reset_captcha()
                         return False
             
             st.markdown("---")
             st.info("💡 Use as credenciais fornecidas para acessar a área administrativa.")
-            st.caption("🔒 Proteção: CAPTCHA + Rate Limiting (máx. 5 tentativas/5 min) + Session Timeout (30 min)")
+            st.caption("🔒 Proteção: Rate Limiting (máx. 5 tentativas/5 min) + Session Timeout (30 min)")
         
         return False
     
