@@ -55,7 +55,8 @@ class FileManager:
         with open(file_path, "wb") as f:
             f.write(uploaded_file.getbuffer())
         
-        return str(file_path)
+        # Retornar caminho com barras normais para compatibilidade Windows/Linux
+        return str(file_path).replace('\\', '/')
     
     @staticmethod
     def delete_file(file_path: str) -> bool:

@@ -407,14 +407,20 @@ def show_certificados():
     col1, col2 = st.columns([2, 1])
     
     with col1:
-        # Exibir imagem ou PDF
-        if current_cert['arquivo_path'] and Path(current_cert['arquivo_path']).exists():
-            file_ext = Path(current_cert['arquivo_path']).suffix.lower()
+        # Exibir imagem ou PDF - normalizar caminho para compatibilidade Windows/Linux
+        if current_cert['arquivo_path']:
+            # Normalizar caminho: substituir \ por / para compatibilidade
+            arquivo_normalizado = current_cert['arquivo_path'].replace('\\', '/')
             
-            if file_ext in ['.png', '.jpg', '.jpeg', '.gif']:
-                st.image(current_cert['arquivo_path'], use_container_width=True)
-            elif file_ext == '.pdf':
-                st.info("📄 Documento PDF - disponível para download")
+            if Path(arquivo_normalizado).exists():
+                file_ext = Path(arquivo_normalizado).suffix.lower()
+                
+                if file_ext in ['.png', '.jpg', '.jpeg', '.gif']:
+                    st.image(arquivo_normalizado, use_container_width=True)
+                elif file_ext == '.pdf':
+                    st.info("📄 Documento PDF - disponível para download")
+            else:
+                st.warning(f"⚠️ Arquivo não encontrado: {arquivo_normalizado}")
     
     with col2:
         tema = current_cert['tema'] if 'tema' in current_cert.keys() and current_cert['tema'] else 'certificado'
