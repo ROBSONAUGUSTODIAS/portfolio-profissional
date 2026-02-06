@@ -55,6 +55,7 @@ class FileManager:
         with open(file_path, "wb") as f:
             f.write(uploaded_file.getbuffer())
         
+
         # Retornar caminho com barras normais para compatibilidade Windows/Linux
         return str(file_path).replace('\\', '/')
     

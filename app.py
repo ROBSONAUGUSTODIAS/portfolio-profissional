@@ -143,8 +143,8 @@ def show_home():
             platform_icons = {
                 'linkedin': {'icon': '💼', 'color': '#0A66C2', 'name': 'LinkedIn'},
                 'github': {'icon': '💻', 'color': '#181717', 'name': 'GitHub'},
-                'portfolio': {'icon': '🌐', 'color': '#FF6B6B', 'name': 'Portfólio'},
-                'portfólio': {'icon': '🌐', 'color': '#FF6B6B', 'name': 'Portfólio'},
+                'portfolio': {'icon': '🌐', 'color': '#FF6B6B', 'name': 'Portal Slider Antigo'},
+                'portfólio': {'icon': '🌐', 'color': '#FF6B6B', 'name': 'Portal Slider Antigo'},
                 'email': {'icon': '📧', 'color': '#EA4335', 'name': 'Email'},
                 'twitter': {'icon': '🐦', 'color': '#1DA1F2', 'name': 'Twitter'},
                 'instagram': {'icon': '📷', 'color': '#E4405F', 'name': 'Instagram'},

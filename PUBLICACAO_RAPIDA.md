@@ -19,7 +19,7 @@
 # 1. Inicializar Git
 git init
 git add .
-git commit -m "Initial commit - Portfólio Profissional"
+git commit -m "Initial commit - Portifólio Profissional"
 
 # 2. Criar repositório no GitHub (https://github.com/new)
 #    - Nome: portfolio-profissional
