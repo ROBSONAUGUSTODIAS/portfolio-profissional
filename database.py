@@ -196,10 +196,12 @@ class Database:
         return cursor.lastrowid
 
     def get_certificados(self, curriculum_id: int):
-        """Recupera todos os certificados de um currículo"""
+        """Recupera todos os certificados de um currículo na ordem de inserção"""
         cursor = self.conn.cursor()
         cursor.execute("""
-            SELECT * FROM certificados WHERE curriculum_id = ? ORDER BY data_obtencao ASC
+            SELECT * FROM certificados 
+            WHERE curriculum_id = ? 
+            ORDER BY id ASC
         """, (curriculum_id,))
         return cursor.fetchall()
 

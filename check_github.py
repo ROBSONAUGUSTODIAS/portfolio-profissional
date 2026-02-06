@@ -13,7 +13,7 @@ github_existe = any('github' in link['plataforma'].lower() for link in links)
 
 if not github_existe:
     print("\n✅ Adicionando GitHub...")
-    db.add_link_social(curriculum['id'], 'GitHub', 'https://github.com/1201133')
+    db.add_link_social(curriculum['id'], 'GitHub', 'https://github.com/ROBSONAUGUSTODIAS')
     print("GitHub adicionado com sucesso!")
 else:
     print("\nℹ️ GitHub já está cadastrado!")

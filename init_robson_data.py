@@ -291,6 +291,7 @@ Objetivo: Continuar evoluindo como Engenheiro DevOps em ambientes Cloud-native, 
     # Adicionar links sociais
     links = [
         ("LinkedIn", "https://www.linkedin.com/in/robson-augusto-dias/"),
+        ("GitHub", "https://github.com/ROBSONAUGUSTODIAS"),
         ("Portfólio", "https://prototiposlider.azurewebsites.net"),
         ("Email", "mailto:robson.augusto.dias@hotmail.com"),
     ]

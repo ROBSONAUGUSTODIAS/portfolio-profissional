@@ -608,52 +608,98 @@ def show_admin():
         if curriculum:
             with st.form("form_certificado"):
                 st.markdown("**Adicionar Certificado**")
-                titulo = st.text_input("Título do Certificado")
-                issuer = st.text_input("Emissor/Instituição")
-                descricao = st.text_area("Descrição", height=100)
                 
+                # Campo 1: Título (obrigatório)
+                titulo = st.text_input("Título do Certificado", placeholder="Ex: Python Advanced Certification")
+                
+                # Campo 2: Emissor (importante)
+                issuer = st.text_input("Emissor/Instituição", placeholder="Ex: Udemy, Coursera, Google")
+                
+                # Campo 3: Tema/Categoria (organização)
+                tema = st.selectbox("Tema do Certificado", options=["Certificado", "Certificação", "Diploma", "Curso", "Extensão"], index=0)
+                
+                # Campos 4 e 5: Datas (informações temporais agrupadas)
                 col1, col2 = st.columns(2)
                 with col1:
                     data_obtencao = st.date_input("Data de Obtenção", min_value=datetime.date(2000, 1, 1), max_value=datetime.date(2050, 12, 31))
                 with col2:
                     data_validade = st.date_input("Data de Validade (opcional)", value=None, min_value=datetime.date(2000, 1, 1), max_value=datetime.date(2050, 12, 31))
                 
-                url_certificado = st.text_input("URL de Verificação (opcional)")
-                arquivo = st.file_uploader("Upload do Certificado (Imagem ou PDF)", type=['png', 'jpg', 'jpeg', 'pdf', 'gif'])
-                tema = st.selectbox("Tema do Certificado", options=["Certificado", "Certificação", "Diploma", "Curso", "Extensão"], index=0)
+                # Campo 6: Descrição (detalhes adicionais)
+                descricao = st.text_area("Descrição", height=100, placeholder="Descreva o conteúdo e aprendizados do certificado...")
                 
-                if st.form_submit_button("➕ Adicionar Certificado"):
-                    if titulo and arquivo:
-                        from assets.utils import FileManager
-                        file_path = FileManager.save_upload_file(arquivo, "data/certificados")
-                        
-                        db.add_certificado(
-                            curriculum['id'],
-                            titulo,
-                            file_path,
-                            issuer,
-                            str(data_obtencao),
-                            str(data_validade) if data_validade else "",
-                            descricao,
-                            url_certificado,
-                            arquivo.type,
-                            tema
-                        )
-                        st.success("✅ Certificado adicionado!")
+                # Campo 7: URL de Verificação (opcional)
+                url_certificado = st.text_input("URL de Verificação (opcional)", placeholder="https://...")
+                
+                # Campo 8: Upload do Arquivo (por último)
+                arquivo = st.file_uploader("Upload do Certificado (Imagem ou PDF)", type=['png', 'jpg', 'jpeg', 'pdf', 'gif'])
+                
+                if st.form_submit_button("➕ Adicionar Certificado", use_container_width=True):
+                    # Validação completa dos campos obrigatórios
+                    if not titulo or not titulo.strip():
+                        st.session_state.cert_message = {"type": "error", "text": "⚠️ O título do certificado é obrigatório!"}
+                        st.rerun()
+                    elif not arquivo:
+                        st.session_state.cert_message = {"type": "error", "text": "⚠️ Selecione um arquivo de certificado (imagem ou PDF)!"}
                         st.rerun()
                     else:
-                        st.error("⚠️ Preencha título e selecione arquivo")
+                        try:
+                            from assets.utils import FileManager
+                            file_path = FileManager.save_upload_file(arquivo, "data/certificados")
+                            
+                            certificado_id = db.add_certificado(
+                                curriculum['id'],
+                                titulo.strip(),
+                                file_path,
+                                issuer.strip() if issuer else "",
+                                str(data_obtencao),
+                                str(data_validade) if data_validade else "",
+                                descricao.strip() if descricao else "",
+                                url_certificado.strip() if url_certificado else "",
+                                arquivo.type,
+                                tema.lower()
+                            )
+                            
+                            # Verificar se foi adicionado com sucesso
+                            if certificado_id:
+                                st.session_state.cert_message = {"type": "success", "text": f"✅ Certificado '{titulo}' adicionado com sucesso!"}
+                            else:
+                                st.session_state.cert_message = {"type": "error", "text": "❌ Falha ao adicionar certificado no banco de dados"}
+                            st.rerun()
+                        except Exception as e:
+                            st.session_state.cert_message = {"type": "error", "text": f"❌ Erro ao adicionar certificado: {str(e)}"}
+                            st.rerun()
+            
+            # Exibir mensagem de feedback abaixo do formulário
+            if "cert_message" in st.session_state:
+                if st.session_state.cert_message["type"] == "success":
+                    st.success(st.session_state.cert_message["text"])
+                elif st.session_state.cert_message["type"] == "error":
+                    st.error(st.session_state.cert_message["text"])
+                # Limpar mensagem após exibir
+                del st.session_state.cert_message
             
             st.markdown("---")
             st.markdown("**Certificados Cadastrados**")
             certificados = db.get_certificados(curriculum['id'])
-            if certificados:
-                for cert in certificados:
+            
+            # Verificação robusta
+            if certificados is None:
+                st.warning("⚠️ Erro ao buscar certificados no banco de dados")
+                certificados = []
+            
+            # Mostrar total de certificados
+            st.caption(f"📊 Total de certificados: {len(certificados)}")
+            
+            if len(certificados) > 0:
+                # Enumerar certificados para mostrar ordem sequencial
+                for index, cert in enumerate(certificados, start=1):
                     tema = cert['tema'] if 'tema' in cert.keys() and cert['tema'] else 'certificado'
                     color = COLORS.get(tema, COLORS['certificado'])
                     issuer_html = f" - _Emissor: {cert['issuer']}_" if cert['issuer'] else ""
                     
-                    with st.expander(f"**{cert['titulo']}** {issuer_html}"):
+                    # Mostrar número sequencial junto com o nome
+                    with st.expander(f"**#{index} - {cert['titulo']}** {issuer_html}"):
                         # Formulário de edição
                         with st.form(key=f"form_edit_{cert['id']}"):
                             st.markdown(f"<span style='background:{color};color:white;padding:4px 12px;border-radius:6px;display:inline-block;margin-bottom:10px'>{tema.capitalize()}</span>", unsafe_allow_html=True)
