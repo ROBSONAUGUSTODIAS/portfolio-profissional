@@ -42,7 +42,7 @@ data/portfolio.db-wal
 
 # Dados de Upload
 data/curriculo/*
-data/certificados/*
+# data/certificados/* - TEMPORARIAMENTE PERMITIDO PARA DEPLOY
 !data/curriculo/.gitkeep
 !data/certificados/.gitkeep
 
