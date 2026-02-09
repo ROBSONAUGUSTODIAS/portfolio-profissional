@@ -14,8 +14,10 @@ def test_password_hash():
     print("-" * 60)
     
     from assets.security import SecurityManager
+    import os
     
-    password = "EngenheiroDev0ps@#"
+    # Usar senha de teste genérica (NÃO a senha real de produção)
+    password = os.getenv('TEST_PASSWORD', 'SenhaDeTeste123!')
     hash_value, salt = SecurityManager.hash_password(password)
     
     print(f"✅ Hash gerado: {len(hash_value)} bytes")
@@ -166,29 +168,34 @@ def test_auth_config():
     print("\n📋 Teste 5: Autenticação")
     print("-" * 60)
     
+    import os
+    
+    # Verificar se variáveis de ambiente estão configuradas
+    if not os.getenv('ADMIN_PASSWORD_HASH') or not os.getenv('ADMIN_PASSWORD_SALT'):
+        print("⚠️  Variáveis de ambiente não configuradas")
+        print("   Execute: python scripts/generate_password_hash.py")
+        print("   E configure o arquivo .env")
+        print("   TESTE PULADO")
+        return True  # Não falhar se apenas faltarem as variáveis
+    
     try:
         from assets.auth_config import verify_credentials
         
-        # Testar credenciais corretas
-        if verify_credentials("admin", "EngenheiroDev0ps@#"):
-            print("✅ Login com credenciais corretas: OK")
-        else:
-            print("❌ Login com credenciais corretas: FALHOU")
-            return False
-        
-        # Testar credenciais incorretas
-        if not verify_credentials("admin", "senha_errada"):
+        # Testar apenas credenciais incorretas (não sabemos a senha real)
+        if not verify_credentials("admin", "senha_errada_definitiva"):
             print("✅ Rejeição de senha incorreta: OK")
         else:
             print("❌ Rejeição de senha incorreta: FALHOU")
             return False
         
-        if not verify_credentials("usuario_errado", "EngenheiroDev0ps@#"):
+        if not verify_credentials("usuario_errado", "qualquer_senha"):
             print("✅ Rejeição de usuário incorreto: OK")
         else:
             print("❌ Rejeição de usuário incorreto: FALHOU")
             return False
         
+        print("✅ Testes de autenticação: OK")
+        print("   (Para testar login correto, use a aplicação web)")
         return True
     except Exception as e:
         print(f"❌ Erro ao testar autenticação: {e}")

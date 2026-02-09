@@ -21,7 +21,6 @@ ADMIN_USERNAME = os.getenv('ADMIN_USERNAME', 'admin')
 ADMIN_PASSWORD_HASH = os.getenv('ADMIN_PASSWORD_HASH')
 ADMIN_PASSWORD_SALT = os.getenv('ADMIN_PASSWORD_SALT')
 
-# Função para verificar credenciais
 def verify_credentials(username: str, password: str) -> bool:
     """
     Verifica se as credenciais estão corretas usando hash seguro
@@ -39,9 +38,10 @@ def verify_credentials(username: str, password: str) -> bool:
     
     # Verificar se hash está configurado
     if not ADMIN_PASSWORD_HASH or not ADMIN_PASSWORD_SALT:
-        # Fallback temporário para desenvolvimento
-        # REMOVER EM PRODUÇÃO
-        return password == "EngenheiroDev0ps@#"
+        print("⚠️ ERRO: Variáveis de ambiente não configuradas!")
+        print("Execute: python scripts/generate_password_hash.py")
+        print("E configure o arquivo .env com ADMIN_PASSWORD_HASH e ADMIN_PASSWORD_SALT")
+        return False
     
     try:
         # Decodificar hash e salt do base64
@@ -51,6 +51,7 @@ def verify_credentials(username: str, password: str) -> bool:
         # Verificar senha com hash
         return SecurityManager.verify_password(password, stored_hash, salt)
     except Exception as e:
-        # Em caso de erro, usar fallback
-        print(f"Erro ao verificar hash: {e}")
-        return password == "EngenheiroDev0ps@#"
+        # Em caso de erro, logar e retornar False
+        print(f"❌ Erro ao verificar credenciais: {e}")
+        print("Verifique se as variáveis ADMIN_PASSWORD_HASH e ADMIN_PASSWORD_SALT estão corretas no .env")
+        return False

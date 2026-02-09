@@ -32,9 +32,12 @@ wheels/
 .DS_Store
 
 # Banco de Dados
-# data/portfolio.db (temporariamente permitido para deploy inicial)
+data/portfolio.db
 data/portfolio.db-shm
 data/portfolio.db-wal
+*.db
+*.sqlite
+*.sqlite3
 
 # Streamlit
 .streamlit/
@@ -42,7 +45,7 @@ data/portfolio.db-wal
 
 # Dados de Upload
 data/curriculo/*
-# data/certificados/* - TEMPORARIAMENTE PERMITIDO PARA DEPLOY
+data/certificados/*
 !data/curriculo/.gitkeep
 !data/certificados/.gitkeep
 
@@ -63,3 +66,9 @@ htmlcov/
 .env
 .env.local
 .env.*.local
+
+# Arquivos de credenciais - NUNCA COMMITAR
+ACESSO_ADMIN.txt
+**/credentials.txt
+**/secrets.txt
+*.secret

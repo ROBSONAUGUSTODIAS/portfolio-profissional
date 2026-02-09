@@ -80,8 +80,24 @@ pip install -r requirements.txt
 
 Para acessar o painel de administração:
 
-1. Acesse a página "🔧 Painel Admin" no menu lateral
-2. Use as credenciais configuradas em `ACESSO_ADMIN.txt`
+1. **Configure o arquivo `.env`** (se ainda não configurou):
+   ```powershell
+   # Gerar hash de senha
+   python scripts/generate_password_hash.py
+   
+   # Copiar template
+   Copy-Item .env.example .env
+   
+   # Editar .env e adicionar os valores gerados
+   ```
+
+2. Acesse a página "🔧 Painel Admin" no menu lateral
+
+3. Use as credenciais configuradas no arquivo `.env`:
+   - Usuário: valor de `ADMIN_USERNAME` (padrão: `admin`)
+   - Senha: a senha que você definiu ao gerar o hash
+
+> **⚠️ Segurança:** O arquivo `.env` contém credenciais e **NUNCA deve ser commitado** no Git. Ele já está no `.gitignore`.
 
 ---
 
