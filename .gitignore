@@ -40,8 +40,9 @@ data/portfolio.db-wal
 *.sqlite3
 
 # Streamlit
-.streamlit/
 .streamlit/secrets.toml
+.streamlit/config.toml
+# Permitir .streamlit/secrets.toml.example (template)
 
 # Dados de Upload
 data/curriculo/*

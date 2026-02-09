@@ -1,6 +1,6 @@
 """
 Configurações de autenticação para o painel administrativo
-Agora com hash de senha seguro
+Suporta .env (local) e Streamlit Secrets (cloud)
 """
 
 import os
@@ -16,10 +16,35 @@ import sys
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from assets.security import SecurityManager
 
-# Credenciais do .env
-ADMIN_USERNAME = os.getenv('ADMIN_USERNAME', 'admin')
-ADMIN_PASSWORD_HASH = os.getenv('ADMIN_PASSWORD_HASH')
-ADMIN_PASSWORD_SALT = os.getenv('ADMIN_PASSWORD_SALT')
+# Tentar importar streamlit (pode não estar disponível em todos os contextos)
+try:
+    import streamlit as st
+    HAS_STREAMLIT = True
+except ImportError:
+    HAS_STREAMLIT = False
+
+def get_config(key: str, default=None):
+    """
+    Obtém configuração de múltiplas fontes (prioridade):
+    1. Streamlit Secrets (para Streamlit Cloud)
+    2. Variáveis de ambiente .env (para desenvolvimento local)
+    3. Valor padrão
+    """
+    # Tentar Streamlit Secrets primeiro (produção)
+    if HAS_STREAMLIT:
+        try:
+            if key in st.secrets:
+                return st.secrets[key]
+        except:
+            pass
+    
+    # Fallback para .env (desenvolvimento local)
+    return os.getenv(key, default)
+
+# Credenciais - suporta .env e st.secrets
+ADMIN_USERNAME = get_config('ADMIN_USERNAME', 'admin')
+ADMIN_PASSWORD_HASH = get_config('ADMIN_PASSWORD_HASH')
+ADMIN_PASSWORD_SALT = get_config('ADMIN_PASSWORD_SALT')
 
 def verify_credentials(username: str, password: str) -> bool:
     """
@@ -38,9 +63,13 @@ def verify_credentials(username: str, password: str) -> bool:
     
     # Verificar se hash está configurado
     if not ADMIN_PASSWORD_HASH or not ADMIN_PASSWORD_SALT:
-        print("⚠️ ERRO: Variáveis de ambiente não configuradas!")
-        print("Execute: python scripts/generate_password_hash.py")
-        print("E configure o arquivo .env com ADMIN_PASSWORD_HASH e ADMIN_PASSWORD_SALT")
+        print("⚠️ ERRO: Credenciais não configuradas!")
+        if HAS_STREAMLIT:
+            print("Configure em: Streamlit Cloud > Settings > Secrets")
+            print("Use o template em: .streamlit/secrets.toml.example")
+        else:
+            print("Execute: python scripts/generate_password_hash.py")
+            print("E configure o arquivo .env")
         return False
     
     try:
